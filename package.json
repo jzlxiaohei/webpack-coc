@@ -1,0 +1,46 @@
+{
+  "name": "webpack-coc",
+  "version": "0.0.1",
+  "description": "webpack convention over configuration",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build:lib": "babel src --out-dir lib",
+    "build":"npm run build:lib"
+  },
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "assets-webpack-plugin": "^3.1.0",
+    "autoprefixer": "^6.0.3",
+    "babel": "5.8.21",
+    "babel-core": "^5.8.22",
+    "babel-eslint": "^4.1.3",
+    "babel-loader": "^5.3.2",
+    "babel-runtime": "^5.8.20",
+    "clone": "^1.0.2",
+    "css-loader": "^0.17.0",
+    "del": "^2.0.2",
+    "eslint": "^1.7.3",
+    "extract-text-webpack-plugin": "^0.8.2",
+    "file-loader": "^0.8.4",
+    "glob": "^6.0.1",
+    "gulp": "^3.9.0",
+    "gulp-clean": "^0.3.1",
+    "gulp-util": "^3.0.6",
+    "less": "^2.5.1",
+    "less-loader": "^2.2.1",
+    "object-assign": "^4.0.1",
+    "postcss-loader": "^0.6.0",
+    "precss": "^1.1.3",
+    "style-loader": "^0.12.3",
+    "url-loader": "^0.5.6",
+    "webpack": "^1.12.0",
+    "webpack-dev-server": "^1.10.1"
+  },
+  "devDependencies": {
+    "jquery": "^2.1.4",
+    "react": "^0.14.2",
+    "react-dom": "^0.14.2"
+  }
+}
