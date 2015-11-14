@@ -2,11 +2,11 @@
   "name": "webpack-coc",
   "version": "0.0.1",
   "description": "webpack convention over configuration",
+  "keywords":"webpack,f2e build solution,convention over configuration",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build:lib": "babel src --out-dir lib",
-    "build":"npm run build:lib"
+    "build:lib": "babel src --out-dir lib --stage 0",
+    "prepublish": "npm run build:lib"
   },
   "author": "",
   "license": "MIT",
