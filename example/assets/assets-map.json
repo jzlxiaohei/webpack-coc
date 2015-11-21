@@ -1,29 +1,40 @@
 {
-  "contact/contact.entry.js": {
-    "js": "contact/contact.entry.js-0d393e51ab74f275a394.js"
+  "webpack-coc1/lib": {
+    "js": "/dist/webpack-coc/lib.js?v=0cd618ca016098e6ad2c37d4213f319451a70ab3"
   },
-  "index/index.entry.js": {
-    "js": "index/index.entry.js-27a1771828a63ea51f88.js",
-    "css": "index/index.entry.js-27a1771828a63ea51f88.css"
+  "webpack-co2c/contact/contact.entry": {
+    "js": "/dist/webpack-coc/contact/contact.entry.js?v=d33ce577df3781a67451"
   },
-  "other/other.entry.js": {
-    "js": "other/other.entry.js-18c55e56a94425f878d7.js"
+  "webpack3-coc/index/index.entry": {
+    "js": "/dist/webpack-coc/index/index.entry.js?v=3daca13bf1e82172b307",
+    "css": "/dist/webpack-coc/index/index.entry.css?v=3daca13bf1e82172b307"
   },
-  "commons": {
-    "js": "commons-a7bbdd4ef0f443074e62.js"
+  "webpack-4coc/other/other.entry": {
+    "js": "/dist/webpack-coc/other/other.entry.js?v=50c6347a1511561b12fd"
   },
-  "lib": {
-    "js": "lib-09f8ad7130702f092145.js",
-    "css": "lib-09f8ad7130702f092145.css"
+  "webpack-5coc/commons": {
+    "js": "/dist/webpack-coc/commons.js?v=60e99c328b3465a2f92a",
+    "css": "/dist/webpack-coc/commons.css?v=60e99c328b3465a2f92a"
   },
-  "contact/contact.entry": {
-    "js": "contact/contact.entry-0697b7ca795dfc266569.js"
+  "webpack-coc/lib": {
+    "js": "/dist/webpack-coc/lib.js?v=0cd618ca016098e6ad2c37d4213f319451a70ab3"
   },
-  "index/index.entry": {
-    "js": "index/index.entry-2832c118d0c1cff3c784.js",
-    "css": "index/index.entry-2832c118d0c1cff3c784.css"
+  "webpack-coc/contact/contact.entry": {
+    "js": "/dist/webpack-coc/contact/contact.entry.js?v=d33ce577df3781a67451"
   },
-  "other/other.entry": {
-    "js": "other/other.entry-67a2f8412c9eb9c2f8f8.js"
+  "webpack-coc/index/index.entry": {
+    "js": "/dist/webpack-coc/index/index.entry.js?v=ce751c4db9dfaf46a854",
+    "css": "/dist/webpack-coc/index/index.entry.css?v=ce751c4db9dfaf46a854"
+  },
+  "webpack-coc/other/other.entry": {
+    "js": "/dist/webpack-coc/other/other.entry.js?v=50c6347a1511561b12fd"
+  },
+  "webpack-coc/commons": {
+    "js": "/dist/webpack-coc/commons.js?v=60e99c328b3465a2f92a",
+    "css": "/dist/webpack-coc/commons.css?v=60e99c328b3465a2f92a"
+  },
+  "webpack-coc/common": {
+    "js": "/dist/webpack-coc/common.js?v=f123ad21004780674f59",
+    "css": "/dist/webpack-coc/common.css?v=f123ad21004780674f59"
   }
 }

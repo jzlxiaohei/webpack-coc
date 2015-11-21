@@ -1,17 +1,19 @@
 {
   "name": "webpack-coc",
-  "version": "0.0.1",
+  "version": "0.0.3",
   "description": "webpack convention over configuration",
-  "keywords":"webpack,f2e build solution,convention over configuration",
-  "main": "index.js",
+  "keywords": "webpack,f2e build solution,convention over configuration",
+  "main": "./lib/index.js",
   "scripts": {
     "build:lib": "babel src --out-dir lib --stage 0",
-    "prepublish": "npm run build:lib"
+    "prepublish": "npm run build:lib",
+    "test": "mocha test/*.spec.js --compilers js:babel-core/register --recursive",
+    "setup_test": "babel-node test/setup.js"
   },
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "assets-webpack-plugin": "^3.1.0",
+    "assets-webpack-plugin-zl": "^3.4.0",
     "autoprefixer": "^6.0.3",
     "babel": "5.8.21",
     "babel-core": "^5.8.22",
@@ -30,17 +32,28 @@
     "gulp-util": "^3.0.6",
     "less": "^2.5.1",
     "less-loader": "^2.2.1",
+    "mkdirp": "^0.5.1",
     "object-assign": "^4.0.1",
+    "object-hash": "^0.9.2",
     "postcss-loader": "^0.6.0",
     "precss": "^1.1.3",
     "style-loader": "^0.12.3",
+    "uglify-js": "^2.6.1",
     "url-loader": "^0.5.6",
     "webpack": "^1.12.0",
     "webpack-dev-server": "^1.10.1"
   },
   "devDependencies": {
+    "async": "^1.5.0",
+    "del": "^2.1.0",
+    "express": "^4.13.3",
     "jquery": "^2.1.4",
     "react": "^0.14.2",
-    "react-dom": "^0.14.2"
+    "react-dom": "^0.14.2",
+    "should": "^7.1.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jzlxiaohei/webpack-coc"
   }
 }

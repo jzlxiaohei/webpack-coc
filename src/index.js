@@ -2,17 +2,22 @@ import path from 'path'
 import fs from 'fs'
 import glob from 'glob'
 import clone from 'clone'
-import AssetsPlugin from 'assets-webpack-plugin'
+import objHash from 'object-hash';
+
 import webpack from 'webpack'
-var objectAssign = require('object-assign');
+import WebpackDevServer from 'webpack-dev-server'
+
+import AssetsPlugin from 'assets-webpack-plugin-zl'
+import objectAssign from 'object-assign';
+var UglifyJS = require("uglify-js");
 
 import replaceHolder from './utils/replaceHolder'
 
-import productionNormal from './defaultConfig/production/normal.config'
-import productionLib from './defaultConfig/production/lib.config'
+import production from './defaultConfig/production/config'
 import development from './defaultConfig/development/confg'
+var mkdirp = require('mkdirp');
 
-
+//path 以/开头,不以/结尾
 const basicOptions={
     project_name:false,
     src_path:true,
@@ -21,7 +26,8 @@ const basicOptions={
     map_json_filename:false,
     map_json_path:true,
     libs:false,//default []
-    dev_port:false// 9527
+    dev_port:false,// 9527,
+    cdn_path:false,//''
 }
 
 function checkOptions(options){
@@ -32,13 +38,15 @@ function checkOptions(options){
     }
 }
 
-
 export default class WebpackCoc{
 
     constructor(options){
         checkOptions(options)
-        options.dev_port = options.dev_port || 9527;
-        this.options = options;
+        this.options = objectAssign({},options);
+        this.options.dev_port = this.options.dev_port || 9527;
+        this.options.libs = this.options.libs||[];
+        this.cdn_path = this.options.cdn_path ||'';
+
         this.holders={}
         for(var i in options){
             let val = options[i]
@@ -46,9 +54,13 @@ export default class WebpackCoc{
         }
         this.init();
         this.defaultConfig={
-            productionNormal,
-            productionLib,
-            development
+            production:clone(production),
+            //productionLib:clone(productionLib),
+            development:clone(development)
+        }
+        this.finalConfig={
+            production:null,
+            development:null
         }
     }
 
@@ -60,70 +72,124 @@ export default class WebpackCoc{
                 path:options.map_json_path,
                 update: true,
                 prettyPrint: true,
-                fullPath:false
+                processAssets:(assets)=>{
+                    let mergedAssets=objectAssign({},this.libAssets,assets)
+                    let newAssets = {}
+                    for(let i in mergedAssets){
+                        newAssets[this.options['project_name']+'/'+i] = mergedAssets[i];
+                    }
+                    return newAssets
+                }
             })
-        this.entries=this.makeEntry();
+        this.entries=this._makeEntry();
 
-        this.devEntries = this.makeDevEntry();
-        this.__initLib()
+        this.devEntries = this._makeDevEntry();
+        this.libsObj=null
+        this.libAssets =null;
+        this._initLib()
 
     }
 
-    __initLib(){
-        const libs = this.options.libs || [];
+    _initLib(){
+        const libs = this.options.libs;
+        if(libs.length===0){ return; }
+
         const LibMap = WebpackCoc.LibMap;
         this.alias={}
         this.noParse=[]
         this.externals={}
+        this.libsObj={}
         for(let i =0;i<libs.length;i++) {
             let lib = libs[i]
             if (! (lib in LibMap) ) {
                 throw new Error(`cannot find ${lib} in WebpackCoc.LibMap,make sure you config the item properly`)
             }
             let libConfig = LibMap[lib];
-            this.alias[lib] = libConfig.alias
-            this.noParse.push(libConfig.noParse || libConfig.alias)
+            this.alias[lib] = libConfig.alias || libConfig.path
+            this.noParse.push(libConfig.noParse || libConfig.path)
             this.externals[lib] = libConfig.externals
+            this.libsObj[lib] = libConfig.path;
         }
+        this.libsObj = this._replaceHolder(this.libsObj);
     }
 
-    getProductionNormal(){
-        let originConfig = clone(this.defaultConfig.productionNormal)
+    _replaceHolder(obj){
+        return replaceHolder(this.holders,obj)
+    }
+
+    buildProduction(){
+        let originConfig = clone(this.defaultConfig.production)
         originConfig.plugins.push(this.__assetsPluginInstance)
-        originConfig.entry = this.entries
         originConfig.resolve.alias = this.alias
         originConfig.module.noParse = this.noParse
         originConfig.externals = this.externals;
-        if(this.options.save_config){
 
-        }
-        return replaceHolder(this.holders,originConfig)
+        originConfig.entry = this.entries
+        this.finalConfig.production = this._replaceHolder(originConfig)
+        return this.finalConfig.production
     }
 
-    getProductionLib(){
-        let originConfig = clone(this.defaultConfig.productionLib);
-        originConfig.plugins.push(this.__assetsPluginInstance)
-        originConfig.resolve.alias = this.alias
-        originConfig.module.noParse = this.noParse
-        return replaceHolder(this.holders,originConfig)
 
-    }
-
-    getDevelopment(){
+    buildDevelopment(){
         let originConfig = clone(this.defaultConfig.development)
-        objectAssign(originConfig.entry, this.devEntries)
         originConfig.resolve.alias = this.alias
         originConfig.module.noParse = this.noParse
-        return replaceHolder(this.holders,originConfig);
+        originConfig.externals = this.externals;
+        originConfig.entry =  this.devEntries
+        this.finalConfig.development = this._replaceHolder(originConfig)
+        return this.finalConfig.development
     }
 
-    runProduction(){
-        webpack(this.getProductionLib(),this.defaultErrorHandler)
-        webpack(this.getProductionNormal(),this.defaultErrorHandler)
+    _buildLib(){
+        const libsObj = this.libsObj
+        if(!libsObj){
+            return;
+        }
+
+        const vals = Object.keys(libsObj).map(function (key) {
+            return libsObj[key];
+        });
+        var result = UglifyJS.minify(vals,{
+            compress:false,
+            mangle:false
+        })
+
+        var libDistPath = this._replaceHolder('[dist_path]/[project_name]/')
+
+        mkdirp.sync(libDistPath);
+
+        fs.writeFileSync(libDistPath+'lib.js',result.code);
+
+        const libHash = objHash(this.libsObj);
+
+        const options = this.options;
+
+        this.libAssets = {
+            'lib':{
+                js:`${options.cdn_path}/${options.project_name}/lib.js?v=${libHash}`
+            }
+        }
+    }
+
+    runProduction(buildLib=true){
+        var prodConfig = this.finalConfig.production;
+        if(!prodConfig){
+            throw new Error('you should call buildProduction method before')
+        }
+
+        if(buildLib){
+            this._buildLib()
+        }
+
+        webpack(prodConfig,this.defaultErrorHandler)
+
     }
 
     runDevelopment(){
-        var devConfig = this.getDevelopment();
+        var devConfig = this.finalConfig.development
+        if(!devConfig){
+            throw new Error('you should call buildDevelopment method before')
+        }
         var server = new WebpackDevServer(webpack(devConfig),{
             hot: true,
             publicPath:devConfig.output.publicPath || 'http://localhost:'+this.options.dev_port,
@@ -134,9 +200,10 @@ export default class WebpackCoc{
         server.listen(this.options.dev_port,'localhost')
     }
 
-    makeEntry(){
+    _makeEntry(){
         var entries = {};
         const srcPath = this.options['src_path'];
+        const project_name = this.options['project_name']
         var entryFiles = glob.sync(path.join(srcPath ,'./**/*.entry.js'));
         for (var i = 0; i < entryFiles.length; i++) {
             var filePath = entryFiles[i];
@@ -147,7 +214,7 @@ export default class WebpackCoc{
         return entries;
     }
 
-    makeDevEntry(){
+    _makeDevEntry(){
         let entries = this.entries
         let devEntries = {}
         for(let i in entries) {
@@ -171,23 +238,31 @@ export default class WebpackCoc{
             console.log(`${errors.length} error(s), first one is:`)
             throw new Error(errors[0]);
         }
+        console.log(stats.toString({
+            colors: true,
+            children: false,
+            chunks: false,
+            modules: false
+        }))
     }
 }
+WebpackCoc.webpack =  webpack;
+WebpackCoc.WebpackDevServer = WebpackDevServer;
 
 WebpackCoc.LibMap = {
     jquery:{
-        alias:'[node_module_path]/jquery/dist/jquery.min.js',
-        noParse:'[node_module_path]/jquery/dist/jquery.min.js',
+        path:'[node_module_path]/jquery/dist/jquery.min.js',
+        //noParse:'[node_module_path]/jquery/dist/jquery.min.js',
         externals:'jQuery'
     },
     react:{
-        alias:'[node_module_path]/react/dist/react.min.js',
-        noParse:'[node_module_path]/react/dist/react.min.js',
+        path:'[node_module_path]/react/dist/react.min.js',
+        //noParse:'[node_module_path]/react/dist/react.min.js',
         externals:'React'
     },
     'react-dom':{
-        alias:"[node_module_path]/react-dom/dist/react-dom.min.js",
-        noParse:"[node_module_path]/react-dom/dist/react-dom.min.js",
+        path:"[node_module_path]/react-dom/dist/react-dom.min.js",
+        //noParse:"[node_module_path]/react-dom/dist/react-dom.min.js",
         externals:'ReactDOM'
         /* 完整的写法,上面的写法是直接expose 到window的写法
          root:'ReactDOM',

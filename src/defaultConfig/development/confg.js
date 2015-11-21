@@ -3,7 +3,6 @@ var path = require('path')
 
 module.exports = {
     entry: {
-        lib:'[src_path]/lib/lib.js'
     },
     output: {
         filename: "[name].js",
@@ -14,8 +13,11 @@ module.exports = {
         //library:'libName',
         publicPath:'http://localhost:[dev_port]/[project_name]'
     },
-    resolve:{
-
+    resolve: {
+        root: [path.join(__dirname,'../../../node_modules'),'[node_module_path]']
+    },
+    resolveLoader: {
+        root: [path.join(__dirname,'../../../node_modules'),'[node_module_path]']
     },
     externals:{},
     module: {
@@ -34,8 +36,12 @@ module.exports = {
         ]
     },
     debug:true,
-    devtool:'source-map',
+    //devtool:'source-map',
     plugins: [
         new webpack.HotModuleReplacementPlugin(),
+        new webpack.NoErrorsPlugin(),
+        new webpack.SourceMapDevToolPlugin(
+            '[file].map', null,
+            "[absolute-resource-path]", "[absolute-resource-path]")
     ]
 }

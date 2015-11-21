@@ -18,6 +18,9 @@ function replaceFn(str,holderObj){
 //直接改变根据占位符key-value(比如'[project_name]' :'webpack-coc'),
 // 把configObj中的字符串中,holderObj的key全替换成value
 export default function replaceHolder(holderObj,configObj){
+    if(typeof configObj == 'string'){
+        return replaceFn(configObj,holderObj)
+    }
     traverse(configObj,function(val,key,obj){
         if(typeof val == 'string' || val instanceof String){
             obj[key] = replaceFn(val,holderObj);
