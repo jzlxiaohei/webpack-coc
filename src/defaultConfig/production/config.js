@@ -65,7 +65,7 @@ module.exports = {
             name:'common',
             filename:'[name].js?v=[chunkhash]',
             minChunks:function(module,count){
-                //引用测试大于某个次数
+                //引用次数大于某个次数
                 if(count>=3){
                     return true;
                 }
