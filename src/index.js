@@ -28,6 +28,7 @@ const basicOptions={
     libs:false,//default []
     dev_port:false,// 9527,
     cdn_path:false,//''
+    uglify_lib_options:false//{compress:false}
 }
 
 function checkOptions(options){
@@ -45,8 +46,9 @@ export default class WebpackCoc{
         this.options = objectAssign({},options);
         this.options.dev_port = this.options.dev_port || 9527;
         this.options.libs = this.options.libs||[];
-        this.cdn_path = this.options.cdn_path ||'';
+        this.options.cdn_path = this.options.cdn_path ||'';
 
+        this.options.uglify_lib_options = objectAssign({compress:false},this.options.uglify_lib_options);
         this.holders={}
         for(var i in options){
             let val = options[i]
@@ -149,10 +151,7 @@ export default class WebpackCoc{
         const vals = Object.keys(libsObj).map(function (key) {
             return libsObj[key];
         });
-        var result = UglifyJS.minify(vals,{
-            compress:false,
-            mangle:false
-        })
+        var result = UglifyJS.minify(vals,this.options.uglify_lib_options)
 
         var libDistPath = this._replaceHolder('[dist_path]/[project_name]/')
 
