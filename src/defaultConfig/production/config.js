@@ -12,13 +12,11 @@ module.exports = {
         filename: "[name].js?v=[chunkhash]",
         chunkFilename:'[name].js?v=[chunkhash]',
         path: '[dist_path]/[project_name]',
-        libraryTarget:'umd',
+        libraryTarget:'var',
         publicPath:'[cdn_path]/[project_name]/'
     },
     //devtool: 'eval',
-    externals:{
-
-    },
+    externals:{},//build outside
 
     resolve: {
         root: [path.join(__dirname,'../../../node_modules'),'[node_module_path]']
@@ -44,11 +42,11 @@ module.exports = {
             },
             {
                 test: /\.(png|jpg|gif)$/,
-                loader: 'file-loader?name=img/[name]-[hash].[ext]'
+                loader: 'url-loader?limit=10000&name=img/[name]-[hash].[ext]'
             }
         ]
     },
-    devtool:'sourcemap',
+    devtool:'#source-map',
 
     plugins: [
         new ExtractTextPlugin("[name].css?v=[chunkhash]"),

@@ -9,7 +9,7 @@ module.exports = {
         filename: "[name].js",
         chunkFilename:'[name].js',
         path:  "/dist",
-        libraryTarget:'umd',
+        libraryTarget:'var',
         sourceMapFilename:'[name].map',
         //library:'libName',
         publicPath:'http://localhost:[dev_port]/[project_name]'

@@ -1,1 +1,0 @@
-alert('contact async load');

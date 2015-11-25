@@ -5,7 +5,7 @@ module.exports = {
         filename: "[name]-[chunkhash].js",
         chunkFilename:'[name]-[chunkhash].js',
         path: '[dist_path]/[project_name]',
-        libraryTarget:'umd',
+        libraryTarget:'var',
         publicPath:'/[project_name]'
     },
     //devtool: 'eval',
