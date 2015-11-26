@@ -7,9 +7,9 @@
 
 1. 路径问题很让人纠结,经常出问题,微调很耗时.
 
-2. 另外一个工程里里可能有多个项目,这时候会有多个`webpack.config.js`,维护多个配置文件还是挺蛋疼的.
+2. 另外一个工程里,可能有多个项目,这时候会有多个`webpack.config.js`,维护多个配置文件还是挺蛋疼的.
 
-3. lib的打包比较慢.（后面知道通过`CommonChunkPlugin`的一个特别用法,也能搞定,不过个人问题lib就是lib,和`common`是有区别的)
+3. lib的打包比较慢.（后面知道通过`CommonChunkPlugin`的一个特别用法,也能搞定,不过个人认为lib就是lib,和`common`是有区别的)
 
 #说明:
 
@@ -113,4 +113,4 @@
 
 #example
     
-    [webpack-coc-example](https://github.com/jzlxiaohei/webpack-coc-example)
+[webpack-coc-example](https://github.com/jzlxiaohei/webpack-coc-example)
