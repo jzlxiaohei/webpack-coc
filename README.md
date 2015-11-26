@@ -111,6 +111,32 @@
 
 `dev_port`: webpack-dev-server开发时,服务的端口号.
 
+#开发
+
+    本工具会自动识别`src_path`下所有 `*.entry.js`文件.假设现在开发index页,那么建文件夹index,然后添加`index.entry.js`,就可以写代码了
+    
+    //index/index.entry.js
+    //支持babel stage-0 的语法
+    import ReactDOM from 'react-dom' //引人库
+    import IndexContainer from './IndexContainer.js' //引人js文件,这里假设范围react组件
+    import './index.less' //引人less
+    import logo from '.img/logo.png' //引人图片
+    
+    //index的一些逻辑
+    ReactDom.render(
+        <div>
+            <IndexContainer />,
+            <img src={logo}>
+        </div>
+        document.body
+    )
+    
+打包后,`[cdn_path]/[project_name]`路径下,会生成`index/index.entry.js`,`index/index.entry.css`
+
+在图片目录下(`[cdn_path]/[project_name]/img/`),生成`logo-[hash].png`,
+
+而且引用图片的路径都会变为[cdn_path]/[project_name]/img/logo-[hash].png.图片引用的路径问题,完全不用你操心.
+
 #example
     
 [webpack-coc-example](https://github.com/jzlxiaohei/webpack-coc-example)
