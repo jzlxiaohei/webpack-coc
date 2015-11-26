@@ -92,14 +92,14 @@
         path:'[node_module_path]/jquery/dist/jquery.min.js',
         externals:'jQuery'
         //noParse:'[node_module_path]/jquery/dist/jquery.min.js',
-        //noParse和alias一般和path一样,如果不一样,在设置
+        //noParse和alias一般和path一样,如果不一样,再设置
     },
     
   有了上面的配置,会自动配置webpack的`alias`和`noParse`,合并所所有的libs,合并成`lib.js`.注意,仅仅是合并,并不压缩,所以提供的path应该是dist版本的路径
    
-  如果要添加新的lib,可以这样
+  如果要添加新的lib,基本同上,然后`options`中`libs`包含`vue`即可
  
-    WebpackCoc.LibMap[vue]= {
+    WebpackCoc.LibMap['vue']= {
         vue:{
             path:'[node_module_path]/vue/dist/vue.min.js',
             externals:'Vue'
