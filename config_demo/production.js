@@ -2,11 +2,11 @@ module.exports = {
     entry: {
     },
     output: {
-        filename: "[name]-[chunkhash].js",
-        chunkFilename:'[name]-[chunkhash].js',
+        filename: "[name].js?v=[chunkhash]",
+        chunkFilename:'[name].js?v=[chunkhash]',
         path: '[dist_path]/[project_name]',
         libraryTarget:'var',
-        publicPath:'/[project_name]'
+        publicPath:'[cdn_path]/[project_name]/'
     },
     //devtool: 'eval',
     externals:{
@@ -36,7 +36,7 @@ module.exports = {
             },
             {
                 test: /\.(png|jpg|gif)$/,
-                loader: 'file-loader?name=/img/[name]-[hash].[ext]'
+                loader: 'url-loader?limit=10000&name=img/[name]-[hash].[ext]'
             }
         ]
     },
