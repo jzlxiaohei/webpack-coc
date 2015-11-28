@@ -23,11 +23,12 @@ const basicOptions={
     src_path:true,
     dist_path:true,
     node_module_path:true,
-    map_json_filename:false,
-    map_json_path:true,
+    map_json_filename:false,//webpack-assets.json
+    map_json_path:false,
     libs:false,//default []
     dev_port:false,// 9527,
     cdn_path:false,//''
+    provide_vars:false,
     uglify_lib_options:false//{compress:false}
 }
 
@@ -121,12 +122,22 @@ export default class WebpackCoc{
 
     buildProduction(){
         let originConfig = clone(this.defaultConfig.production)
-        originConfig.plugins.push(this.__assetsPluginInstance)
         originConfig.resolve.alias = this.alias
         originConfig.module.noParse = this.noParse
         originConfig.externals = this.externals;
 
         originConfig.entry = this.entries
+
+        var options = this.options
+
+        if(options.map_json_path) {
+            originConfig.plugins.push(this.__assetsPluginInstance)
+        }
+        if(options.provide_vars){
+            originConfig.plugins.push(
+                new webpack.ProvidePlugin(options.provide_vars)
+            )
+        }
         this.finalConfig.production = this._replaceHolder(originConfig)
         return this.finalConfig.production
     }
