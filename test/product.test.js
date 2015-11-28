@@ -11,22 +11,8 @@ describe('run production',function(){
         fs.statSync(path.join(__dirname,'dist/fake_demo/index/index.entry.js'))
         fs.statSync(path.join(__dirname,'dist/fake_demo/index/index.entry.css'))
     })
+    
 
-    it('lib should return react',function(){
-        var React =require(path.join(__dirname,'dist/fake_demo/lib.js'))
-        React.Component.should.be.type('function')
-    })
-
-    it('index.entry',function(){
-        //fake window obj .. wtf
-        global.window=global
-
-        require(path.join(__dirname,'dist/fake_demo/common.js'));
-
-        var retObj =require(path.join(__dirname,'dist/fake_demo/index/index.entry.js'));
-
-        (retObj.React === undefined).should.be.true
-    })
 
     it('img path',function(){
         var cssContent = fs.readFileSync(path.join(__dirname,'./dist/fake_demo/index/index.entry.css'));

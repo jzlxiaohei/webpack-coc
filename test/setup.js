@@ -10,8 +10,12 @@ var cocMgr = new CocMgr({
     dist_path:path.join(__dirname,'dist'),
     node_module_path:path.join(__dirname,'../node_modules'),
     map_json_path:path.join(__dirname,"dist"),
-    libs:['react'],
-    cdn_path:'/dist'
+    libs:['react','react-dom'],
+    cdn_path:'/dist',
+    provide_vars:{
+        React:'react',
+        ReactDOM:'react-dom'
+    }
 })
 //console.log(cocMgr.getProductionNormal())
 
@@ -19,4 +23,5 @@ var cocMgr = new CocMgr({
 var webpack = require('webpack')
 
 del.sync(['dist/*'],{force:true})
+cocMgr.buildProduction();
 cocMgr.runProduction();

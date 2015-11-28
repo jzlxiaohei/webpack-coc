@@ -7,8 +7,10 @@
   "scripts": {
     "build:lib": "babel src --out-dir lib --stage 0",
     "prepublish": "npm run build:lib",
-    "test": "mocha test/*.spec.js --compilers js:babel-core/register --recursive",
-    "setup_test": "babel-node test/setup.js"
+    "test_m": "mocha test/product.test.js --compilers js:babel-core/register --recursive",
+    "setup_test": "babel-node test/setup.js",
+    "test_k": "./node_modules/karma/bin/karma start karma.conf.js",
+    "test":"npm run setup_test && npm run test_m && npm run test_k"
   },
   "author": "",
   "license": "MIT",
@@ -39,8 +41,15 @@
     "webpack-dev-server": "^1.10.1"
   },
   "devDependencies": {
-    "eslint": "^1.7.3",
     "del": "^2.1.0",
+    "eslint": "^1.7.3",
+    "jasmine-core": "^2.3.4",
+    "karma": "^0.13.15",
+    "karma-chrome-launcher": "^0.2.1",
+    "karma-jasmine": "^0.3.6",
+    "karma-safari-launcher": "^0.1.1",
+    "react": "^0.14.3",
+    "react-dom": "^0.14.3",
     "should": "^7.1.1"
   },
   "repository": {
