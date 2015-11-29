@@ -58,6 +58,9 @@ module.exports = {
             //mangle: {
             //    except: ['$', 'exports', 'require']
             //},
+            compress: {
+                warnings: false
+            },
             output:{comments:false},
             exclude:/\.min\.js$/
         }),
