@@ -7,7 +7,7 @@
   "scripts": {
     "build:lib": "babel src --out-dir lib --stage 0",
     "prepublish": "npm run build:lib",
-    "test_m": "mocha test/**/.test.js --compilers js:babel-core/register --recursive",
+    "test_m": "mocha test/**/*.test.js --compilers js:babel-core/register --recursive",
     "setup_test": "babel-node test/setup.js",
     "test_k": "./node_modules/karma/bin/karma start karma.conf.js",
     "test":"npm run setup_test && npm run test_m && npm run test_k"
