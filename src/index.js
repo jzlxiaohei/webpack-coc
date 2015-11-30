@@ -12,6 +12,7 @@ import objectAssign from 'object-assign';
 var UglifyJS = require("uglify-js");
 
 import replaceHolder from './utils/replaceHolder'
+import mergeTo from './utils/mergeTo'
 
 import production from './defaultConfig/production/config'
 import development from './defaultConfig/development/confg'
@@ -85,12 +86,10 @@ export default class WebpackCoc{
                 }
             })
         this.entries=this._makeEntry();
-
         this.devEntries = this._makeDevEntry();
         this.libsObj=null
         this.libAssets =null;
         this._initLib()
-
     }
 
     _initLib(){
@@ -122,11 +121,11 @@ export default class WebpackCoc{
 
     buildProduction(){
         let originConfig = clone(this.defaultConfig.production)
-        originConfig.resolve.alias = this.alias
-        originConfig.module.noParse = this.noParse
-        originConfig.externals = this.externals;
-
-        originConfig.entry = this.entries
+        mergeTo(originConfig.resolve.alias,this.alias)
+        mergeTo(originConfig.module.noParse ,this.noParse)
+        mergeTo(originConfig.externals,this.externals);
+        mergeTo(originConfig.entry, this.entries)
+        originConfig.module.noParse = originConfig.module.noParse.concat(this.noParse)
 
         var options = this.options
 
@@ -145,10 +144,11 @@ export default class WebpackCoc{
 
     buildDevelopment(){
         let originConfig = clone(this.defaultConfig.development)
-        originConfig.resolve.alias = this.alias
-        originConfig.module.noParse = this.noParse
-        originConfig.externals = this.externals;
-        originConfig.entry =  this.devEntries
+        mergeTo(originConfig.resolve.alias ,this.alias)
+        mergeTo(originConfig.externals , this.externals)
+        mergeTo(originConfig.entry , this.devEntries)
+        originConfig.module.noParse = originConfig.module.noParse.concat(this.noParse)
+
         this.finalConfig.development = this._replaceHolder(originConfig)
         return this.finalConfig.development
     }

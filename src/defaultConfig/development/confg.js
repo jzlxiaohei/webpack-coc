@@ -14,13 +14,15 @@ module.exports = {
         publicPath:'http://localhost:[dev_port]/[project_name]'
     },
     resolve: {
-        root: [path.join(__dirname,'../../../node_modules'),'[node_module_path]']
+        root: [path.join(__dirname,'../../../node_modules'),'[node_module_path]'],
+        alias:{}
     },
     resolveLoader: {
         root: [path.join(__dirname,'../../../node_modules'),'[node_module_path]']
     },
     externals:{},
     module: {
+        noParse:[],
         loaders: [
             {
                 test: /[\.jsx|\.js ]$/,

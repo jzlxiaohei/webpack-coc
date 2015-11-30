@@ -13,7 +13,6 @@ describe('run production',function(){
     })
     
 
-
     it('img path',function(){
         var cssContent = fs.readFileSync(path.join(__dirname,'./dist/fake_demo/index/index.entry.css'));
         var cssContent = cssContent.toString();

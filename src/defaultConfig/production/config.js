@@ -19,13 +19,14 @@ module.exports = {
     externals:{},//build outside
 
     resolve: {
-        root: [path.join(__dirname,'../../../node_modules'),'[node_module_path]']
+        root: [path.join(__dirname,'../../../node_modules'),'[node_module_path]'],
+        alias:{}
     },
     resolveLoader: {
         root: [path.join(__dirname,'../../../node_modules'),'[node_module_path]']
     },
     module: {
-        //noParse:[],
+        noParse:[],
         loaders: [
             {
                 test: /[\.jsx|\.js ]$/,
