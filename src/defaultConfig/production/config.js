@@ -59,6 +59,7 @@ module.exports = {
             //mangle: {
             //    except: ['$', 'exports', 'require']
             //},
+            mangle:false,
             compress: {
                 warnings: false
             },
