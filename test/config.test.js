@@ -45,4 +45,12 @@ describe('config',function(){
         resolve.alias['react'].should.be.exactly('v3')
         resolve.alias['react-dom'].should.be.true
     })
+    it('user defined config should over default for dev',function(){
+        var resolve = devConfig.resolve;
+        console.log(resolve)
+        resolve.alias['k1'].should.be.exactly('v1')
+        resolve.alias['k2'].should.be.exactly('v2')
+        resolve.alias['react'].should.be.exactly('v3')
+        resolve.alias['react-dom'].should.be.true
+    })
 })
