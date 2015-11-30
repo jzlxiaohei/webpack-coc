@@ -125,7 +125,9 @@ export default class WebpackCoc{
         mergeTo(originConfig.module.noParse ,this.noParse)
         mergeTo(originConfig.externals,this.externals);
         mergeTo(originConfig.entry, this.entries)
-        originConfig.module.noParse = originConfig.module.noParse.concat(this.noParse)
+        if(this.noParse){
+            originConfig.module.noParse = originConfig.module.noParse.concat(this.noParse)
+        }
 
         var options = this.options
 
@@ -147,7 +149,9 @@ export default class WebpackCoc{
         mergeTo(originConfig.resolve.alias ,this.alias)
         mergeTo(originConfig.externals , this.externals)
         mergeTo(originConfig.entry , this.devEntries)
-        originConfig.module.noParse = originConfig.module.noParse.concat(this.noParse)
+        if(this.noParse){
+            originConfig.module.noParse = originConfig.module.noParse.concat(this.noParse)
+        }
 
         this.finalConfig.development = this._replaceHolder(originConfig)
         return this.finalConfig.development
