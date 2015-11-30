@@ -5,7 +5,11 @@ import clone from 'clone'
 import objHash from 'object-hash';
 
 import webpack from 'webpack'
-import WebpackDevServer from 'webpack-dev-server'
+
+console.log(process.env.NODE_ENV)
+if(process.env.NODE_ENV !== 'production'){
+    var WebpackDevServer =require('webpack-dev-server')
+}
 
 import AssetsPlugin from 'assets-webpack-plugin-zl'
 import objectAssign from 'object-assign';
@@ -145,6 +149,10 @@ export default class WebpackCoc{
 
 
     buildDevelopment(){
+        if(process.env.NODE_ENV == 'production'){
+            throw new Error('buildDevelop should not be called in production env');
+        }
+
         let originConfig = clone(this.defaultConfig.development)
         mergeTo(originConfig.resolve.alias ,this.alias)
         mergeTo(originConfig.externals , this.externals)
