@@ -149,7 +149,7 @@ export default class WebpackCoc{
 
 
     buildDevelopment(){
-        if(process.env.NODE_ENV == 'production'){
+        if(process.env.NODE_ENV === 'production'){
             throw new Error('buildDevelop should not be called in production env');
         }
 
