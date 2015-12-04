@@ -6,7 +6,7 @@ import objHash from 'object-hash';
 
 import webpack from 'webpack'
 
-console.log(process.env.NODE_ENV)
+console.log('env:'+process.env.NODE_ENV)
 if(process.env.NODE_ENV !== 'production'){
     var WebpackDevServer =require('webpack-dev-server')
 }
