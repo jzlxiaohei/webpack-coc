@@ -207,10 +207,13 @@ export default class WebpackCoc{
 
     }
 
-    runDevelopment(){
+    runDevelopment(buildLib=true){
         var devConfig = this.finalConfig.development
         if(!devConfig){
             throw new Error('you should call buildDevelopment method before')
+        }
+        if(buildLib){
+            this._buildLib()
         }
         var server = new WebpackDevServer(webpack(devConfig),{
             hot: true,
