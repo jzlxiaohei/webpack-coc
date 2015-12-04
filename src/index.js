@@ -89,8 +89,7 @@ export default class WebpackCoc{
                     return newAssets
                 }
             })
-        this.entries=this._makeEntry();
-        this.devEntries = this._makeDevEntry();
+
         this.libsObj=null
         this.libAssets =null;
         this._initLib()
@@ -123,47 +122,7 @@ export default class WebpackCoc{
         return replaceHolder(this.holders,obj)
     }
 
-    buildProduction(){
-        let originConfig = clone(this.defaultConfig.production)
-        mergeTo(originConfig.resolve.alias,this.alias)
-        mergeTo(originConfig.module.noParse ,this.noParse)
-        mergeTo(originConfig.externals,this.externals);
-        mergeTo(originConfig.entry, this.entries)
-        if(this.noParse){
-            originConfig.module.noParse = originConfig.module.noParse.concat(this.noParse)
-        }
 
-        var options = this.options
-
-        if(options.map_json_path) {
-            originConfig.plugins.push(this.__assetsPluginInstance)
-        }
-        if(options.provide_vars){
-            originConfig.plugins.push(
-                new webpack.ProvidePlugin(options.provide_vars)
-            )
-        }
-        this.finalConfig.production = this._replaceHolder(originConfig)
-        return this.finalConfig.production
-    }
-
-
-    buildDevelopment(){
-        if(process.env.NODE_ENV === 'production'){
-            throw new Error('buildDevelop should not be called in production env');
-        }
-
-        let originConfig = clone(this.defaultConfig.development)
-        mergeTo(originConfig.resolve.alias ,this.alias)
-        mergeTo(originConfig.externals , this.externals)
-        mergeTo(originConfig.entry , this.devEntries)
-        if(this.noParse){
-            originConfig.module.noParse = originConfig.module.noParse.concat(this.noParse)
-        }
-
-        this.finalConfig.development = this._replaceHolder(originConfig)
-        return this.finalConfig.development
-    }
 
     _buildLib(){
         const libsObj = this.libsObj
@@ -191,6 +150,53 @@ export default class WebpackCoc{
                 js:`${options.cdn_path}/${options.project_name}/lib.js?v=${libHash}`
             }
         }
+    }
+
+    buildProduction(){
+        this.entries=this._makeEntry();
+
+        let originConfig = clone(this.defaultConfig.production)
+        mergeTo(originConfig.resolve.alias,this.alias)
+        mergeTo(originConfig.module.noParse ,this.noParse)
+        mergeTo(originConfig.externals,this.externals);
+        mergeTo(originConfig.entry, this.entries)
+        if(this.noParse){
+            originConfig.module.noParse = originConfig.module.noParse.concat(this.noParse)
+        }
+
+        var options = this.options
+
+        if(options.map_json_path) {
+            originConfig.plugins.push(this.__assetsPluginInstance)
+        }
+        if(options.provide_vars){
+            originConfig.plugins.push(
+                new webpack.ProvidePlugin(options.provide_vars)
+            )
+        }
+        this.finalConfig.production = this._replaceHolder(originConfig)
+        return this.finalConfig.production
+    }
+
+
+    buildDevelopment(folder){
+        if(process.env.NODE_ENV === 'production'){
+            throw new Error('buildDevelop should not be called in production env');
+        }
+
+        this.entries=this._makeEntry(folder);
+        this.devEntries = this._makeDevEntry();
+
+        let originConfig = clone(this.defaultConfig.development)
+        mergeTo(originConfig.resolve.alias ,this.alias)
+        mergeTo(originConfig.externals , this.externals)
+        mergeTo(originConfig.entry , this.devEntries)
+        if(this.noParse){
+            originConfig.module.noParse = originConfig.module.noParse.concat(this.noParse)
+        }
+
+        this.finalConfig.development = this._replaceHolder(originConfig)
+        return this.finalConfig.development
     }
 
     runProduction(buildLib=true){
@@ -225,11 +231,16 @@ export default class WebpackCoc{
         server.listen(this.options.dev_port,'localhost')
     }
 
-    _makeEntry(){
+    _makeEntry(folder){
+        folder = folder || '**'
         var entries = {};
         const srcPath = this.options['src_path'];
         const project_name = this.options['project_name']
-        var entryFiles = glob.sync(path.join(srcPath ,'./**/*.entry.js'));
+        const pathPattern = path.join(srcPath ,`./${folder}/*.entry.js`)
+        var entryFiles = glob.sync(pathPattern);
+        if(entryFiles.length==0){
+            throw new Error(`no file match ${pathPattern}`)
+        }
         for (var i = 0; i < entryFiles.length; i++) {
             var filePath = entryFiles[i];
             var key = path.relative(srcPath,filePath);
