@@ -34,7 +34,8 @@ const basicOptions={
     dev_port:false,// 9527,
     cdn_path:false,//''
     provide_vars:false,
-    uglify_lib_options:false//{compress:false}
+    uglify_lib_options:false,//{compress:false},
+    entryExts:false//['js']
 }
 
 function checkOptions(options){
@@ -53,7 +54,7 @@ export default class WebpackCoc{
         this.options.dev_port = this.options.dev_port || 9527;
         this.options.libs = this.options.libs||[];
         this.options.cdn_path = this.options.cdn_path ||'';
-
+        this.options.entryExts = this.options.entryExts || ['js']
         this.options.uglify_lib_options = objectAssign({compress:false},this.options.uglify_lib_options);
         this.holders={}
         for(var i in options){
@@ -236,12 +237,20 @@ export default class WebpackCoc{
         var entries = {};
         const srcPath = this.options['src_path'];
         const project_name = this.options['project_name']
-        const pathPattern = path.join(srcPath ,`./${folder}/*.entry.js`)
-        var entryFiles = glob.sync(pathPattern);
+
+        let entryFiles = []
+        for(let i in this.options.entryExts){
+            let ext = this.options.entryExts[i];
+            let pathPattern = path.join(srcPath ,`./${folder}/*.entry.${ext}`)
+            entryFiles = entryFiles.concat(glob.sync(pathPattern));
+        }
+
+        console.log(entryFiles)
+
         if(entryFiles.length==0){
             throw new Error(`no file match ${pathPattern}`)
         }
-        for (var i = 0; i < entryFiles.length; i++) {
+        for (let i = 0; i < entryFiles.length; i++) {
             var filePath = entryFiles[i];
             var key = path.relative(srcPath,filePath);
             key = key.substring(0,key.lastIndexOf('.'))

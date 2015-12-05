@@ -15,6 +15,7 @@ var cocMgr = new CocMgr({
     //    React:'react',
     //    ReactDOM:'react-dom'
     //}
+    entryExts:['js','ts']
 })
 
 del.sync(['dist/*'],{force:true})

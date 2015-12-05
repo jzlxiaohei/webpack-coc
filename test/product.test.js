@@ -10,6 +10,7 @@ describe('run production',function(){
         fs.statSync(path.join(__dirname,'dist/fake_demo/lib.js'))
         fs.statSync(path.join(__dirname,'dist/fake_demo/index/index.entry.js'))
         fs.statSync(path.join(__dirname,'dist/fake_demo/index/index.entry.css'))
+        fs.statSync(path.join(__dirname,'dist/fake_demo/ts.entry.js'))
     })
     
 
