@@ -57,8 +57,8 @@ export default class WebpackCoc{
         this.options.entryExts = this.options.entryExts || ['js']
         this.options.uglify_lib_options = objectAssign({compress:false},this.options.uglify_lib_options);
         this.holders={}
-        for(var i in options){
-            let val = options[i]
+        for(var i in this.options){
+            let val = this.options[i]
             this.holders[`[${i}]`] = `${val}`;
         }
         this.init();
