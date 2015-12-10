@@ -1,6 +1,6 @@
 {
   "name": "webpack-coc",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "webpack convention over configuration",
   "keywords": "webpack,f2e build solution,convention over configuration",
   "main": "./lib/index.js",
