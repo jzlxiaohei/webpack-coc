@@ -7,6 +7,11 @@ import objHash from 'object-hash';
 import webpack from 'webpack'
 
 console.log('env:'+process.env.NODE_ENV)
+
+function isArray(arr){
+    return Object.prototype.toString.call( arr ) === '[object Array]'
+}
+
 if(process.env.NODE_ENV !== 'production'){
     var WebpackDevServer =require('webpack-dev-server')
 }
@@ -153,8 +158,8 @@ export default class WebpackCoc{
         }
     }
 
-    buildProduction(){
-        this.entries=this._makeEntry();
+    buildProduction(folder){
+        this.entries=this._makeEntry(folder);
 
         let originConfig = clone(this.defaultConfig.production)
         mergeTo(originConfig.resolve.alias,this.alias)
@@ -232,8 +237,11 @@ export default class WebpackCoc{
         server.listen(this.options.dev_port,'localhost')
     }
 
-    _makeEntry(folder){
-        folder = folder || '**'
+    _makeEntry(folders){
+        folders = folders || '**'
+        if(!isArray(folders)){
+            folders = [folders]
+        }
         var entries = {};
         const srcPath = this.options['src_path'];
         const project_name = this.options['project_name']
@@ -241,11 +249,15 @@ export default class WebpackCoc{
         let entryFiles = []
         for(let i in this.options.entryExts){
             let ext = this.options.entryExts[i];
-            let pathPattern = path.join(srcPath ,`./${folder}/*.entry.${ext}`)
-            entryFiles = entryFiles.concat(glob.sync(pathPattern));
+            for(let j in folders){
+                var folder = folders[j];
+                let pathPattern = path.join(srcPath ,`./${folder}/*.entry.${ext}`)
+                console.log(pathPattern)
+                entryFiles = entryFiles.concat(glob.sync(pathPattern));
+            }
         }
 
-        console.log(entryFiles)
+        console.log('entryFiles: '+entryFiles)
 
         if(entryFiles.length==0){
             throw new Error(`no file match ${pathPattern}`)

@@ -39,7 +39,6 @@ var devConfig = cocMgr.buildDevelopment();
 describe('config',function(){
     it('user defined config should over default',function(){
         var resolve = prodConfig.resolve;
-        console.log(resolve)
         resolve.alias['k1'].should.be.exactly('v1')
         resolve.alias['k2'].should.be.exactly('v2')
         resolve.alias['react'].should.be.exactly('v3')
@@ -47,7 +46,6 @@ describe('config',function(){
     })
     it('user defined config should over default for dev',function(){
         var resolve = devConfig.resolve;
-        console.log(resolve)
         resolve.alias['k1'].should.be.exactly('v1')
         resolve.alias['k2'].should.be.exactly('v2')
         resolve.alias['react'].should.be.exactly('v3')
