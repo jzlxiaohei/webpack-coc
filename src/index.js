@@ -287,7 +287,7 @@ export default class WebpackCoc{
 
     defaultErrorHandler(err,stats){
         if(err){
-            throw new err;
+            throw err;
         }
         var jsonStats = stats.toJson();
         var errors = jsonStats.errors
