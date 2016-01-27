@@ -1,19 +1,19 @@
 {
   "lib": {
-    "js": "/webpack_coc/lib-6c5f826205a31ee75eb7.js",
-    "css": "/webpack_coc/lib-6c5f826205a31ee75eb7.css"
+    "js": "/webpack_coc/lib-bbdb1e7640c552927416.js",
+    "css": "/webpack_coc/lib-bbdb1e7640c552927416.css"
   },
   "contact.entry": {
-    "js": "/webpack_coc/contact.entry-39dc4fa6394eabd6198d.js"
+    "js": "/webpack_coc/contact.entry-1b241300fb653f1e9de3.js"
   },
   "index.entry": {
-    "js": "/webpack_coc/index.entry-47cc79ab7a3b38f113d8.js",
-    "css": "/webpack_coc/index.entry-47cc79ab7a3b38f113d8.css"
+    "js": "/webpack_coc/index.entry-35ea190a001acd62cd2a.js",
+    "css": "/webpack_coc/index.entry-35ea190a001acd62cd2a.css"
   },
   "other.entry": {
-    "js": "/webpack_coc/other.entry-10ba02a1d9f566f7be19.js"
+    "js": "/webpack_coc/other.entry-3fca451be828e2d715e5.js"
   },
   "commons": {
-    "js": "/webpack_coc/commons-8c75145e4b53416a30c9.js"
+    "js": "/webpack_coc/commons-faa62e2a9e373937ce4a.js"
   }
 }
