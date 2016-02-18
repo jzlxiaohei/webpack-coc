@@ -40,7 +40,8 @@ const basicOptions={
     cdn_path:false,//''
     provide_vars:false,
     uglify_lib_options:false,//{compress:false},
-    entryExts:false//['js']
+    entryExts:false,//['js']
+    devServerHost:false
 }
 
 function checkOptions(options){
@@ -61,6 +62,7 @@ export default class WebpackCoc{
         this.options.cdn_path = this.options.cdn_path ||'';
         this.options.entryExts = this.options.entryExts || ['js']
         this.options.uglify_lib_options = objectAssign({compress:false},this.options.uglify_lib_options);
+        this.options.devServerHost = this.options.devServerHost || "localhost"
         this.holders={}
         for(var i in this.options){
             let val = this.options[i]
@@ -219,7 +221,7 @@ export default class WebpackCoc{
 
     }
 
-    runDevelopment(buildLib=true){
+    runDevelopment(options={},buildLib=true){
         var devConfig = this.finalConfig.development
         if(!devConfig){
             throw new Error('you should call buildDevelopment method before')
@@ -227,14 +229,15 @@ export default class WebpackCoc{
         if(buildLib){
             this._buildLib()
         }
-        var server = new WebpackDevServer(webpack(devConfig),{
-            hot: true,
+        var serverOptions = objectAssign({
+            //hot: true,
             publicPath:devConfig.output.publicPath || 'http://localhost:'+this.options.dev_port,
             stats:{
                 colors:true
             }
-        })
-        server.listen(this.options.dev_port,'localhost')
+        },options)
+        var server = new WebpackDevServer(webpack(devConfig),serverOptions)
+        server.listen(this.options.dev_port,this.options.devServerHost)
     }
 
     _makeEntry(folders){
@@ -277,7 +280,7 @@ export default class WebpackCoc{
         for(let i in entries) {
             devEntries[i] = [
                 'webpack-dev-server/client?http://0.0.0.0:' + this.options.dev_port,
-                'webpack/hot/dev-server',
+                //'webpack/hot/dev-server',
                 entries[i]
             ]
         }
