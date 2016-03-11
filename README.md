@@ -1,3 +1,7 @@
+#deprecated
+ 最新的想法，可以看一下这个[gulpfile](https://github.com/jzlxiaohei/react-antd-starter/blob/master/gulpfile.js),单独的gulp任务去打包lib，其他的由webpack打包。
+ 
+ -----------
 最开始,这个项目是个demo类的教程,教程已经迁移到[webpack-coc-demo](https://github.com/jzlxiaohei/webpack-coc-demo)
 
 #WebpackCoc
