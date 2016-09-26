@@ -1,4 +1,5 @@
-#deprecated
+#已经废弃
+ webpack的配置太灵活了，函数用webpack.config.js这样的配置文件更灵活
  最新的想法，可以看一下这个[gulpfile](https://github.com/jzlxiaohei/react-antd-starter/blob/master/gulpfile.js),单独的gulp任务去打包lib，其他的由webpack打包。
  
  -----------
